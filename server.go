@@ -36,13 +36,13 @@ func main() {
 	fmt.Println("[server.go] Generating images and handlers")
 	for _, elem := range qrdatas {
 		fmt.Println(elem)
-		gencode("http://localhost:8080", elem)
+		gencode("http://localhost:6969", elem)
 		http.HandleFunc("/"+elem, RESTHandler)
 	}
 	http.HandleFunc("/registerform", RESTregisterHandler)
 	http.HandleFunc("/registersuccess", RESTnameHandler)
 	fmt.Println("[server.go] Starting REST server")
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":6969", nil)
 	log.Fatal("[server.go] ListenAndServe: ", err)
 }
 
