@@ -107,6 +107,7 @@ func RESTHandler(w http.ResponseWriter, r *http.Request) {
 <p>Bravo ! Tu as trouvé un QRCode PSU !</p>
 <p>ID du QRCode : %s</p>
 <p>Utilisateur : %s</p>
+<p>Score : %d</p>
 </body>
 </html>`
 	if r.Method != "HEAD" && r.Method != "GET" {
@@ -114,7 +115,7 @@ func RESTHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	filled_data := fmt.Sprintf(data, QRhash, name)
 	scoreboard[name] = scoreboard[name] + 1
+	filled_data := fmt.Sprintf(data, QRhash, name, scoreboard[name])
 	fmt.Fprintf(w, filled_data)
 }
