@@ -15,7 +15,7 @@ import (
 	//"os"
 )
 
-var scoreboard = make(map[string]int)
+var scoreboard = make(map[string][]string)
 
 func gencode(domain_name string, qrdata string) {
 	_ = qrcode.WriteFile(domain_name+"/"+qrdata, qrcode.Medium, 256, "qr/"+qrdata+".png")
@@ -115,7 +115,17 @@ func RESTHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	scoreboard[name] = scoreboard[name] + 1
-	filled_data := fmt.Sprintf(data, QRhash, name, scoreboard[name])
+	scoreboard[name] = add_no_doubles(scoreboard[name], QRhash)
+	filled_data := fmt.Sprintf(data, QRhash, name, len(scoreboard[name]))
 	fmt.Fprintf(w, filled_data)
+}
+
+func add_no_doubles(tab []string, e string) []string {
+	for _, elem := range tab {
+		if e == elem {
+			return tab
+		}
+	}
+	tab = append(tab, e)
+	return tab
 }
