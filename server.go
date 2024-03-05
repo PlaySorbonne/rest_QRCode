@@ -15,6 +15,8 @@ import (
 	//"os"
 )
 
+var scoreboard = make(map[string]int)
+
 func gencode(domain_name string, qrdata string) {
 	_ = qrcode.WriteFile(domain_name+"/"+qrdata, qrcode.Medium, 256, "qr/"+qrdata+".png")
 }
@@ -84,9 +86,10 @@ func RESTnameHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	name := r.Form.Get("name")
 	cookie := http.Cookie{
 		Name:  "PSU_treasure_quest_token",
-		Value: r.Form.Get("name"),
+		Value: name,
 	}
 	http.SetCookie(w, &cookie)
 	fmt.Fprintf(w, "Compte bien enregistré")
@@ -112,5 +115,6 @@ func RESTHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	filled_data := fmt.Sprintf(data, QRhash, name)
+	scoreboard[name] = scoreboard[name] + 1
 	fmt.Fprintf(w, filled_data)
 }
